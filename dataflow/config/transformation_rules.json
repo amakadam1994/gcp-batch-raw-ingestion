@@ -1,5 +1,5 @@
 {
-  "MONGODB_MONGODB_USERS_USERS": {
+  "1_MONGODB_USERS": {
     "transforms": [
       {
         "function": "add_date_now",
@@ -19,7 +19,7 @@
       }
     ]
   },
-  "MONGODB_MONGO_USERS1_USERS": {
+  "2_MONGO_USERS1": {
     "transforms": [
       {
         "function": "add_date_now",
