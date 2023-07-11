@@ -34,6 +34,7 @@ class ProcessFileFn(beam.DoFn):
                     #         tbl_row[key] = ""
                     # result.append(tbl_row)
                     result.append(row)
+
             return result
 
         elif file_name.endswith(".csv"):
@@ -67,6 +68,7 @@ def run(argv=None, save_main_session=True):
 
     with beam.Pipeline(options=pipeline_options) as p:
         for table_dict in config.get("tables", []):
+
             bucket_name = table_dict["bucket_name"]
             landing_folder = table_dict["landing_folder"]
             file_pattern = table_dict["file_pattern"]
@@ -95,6 +97,7 @@ def run(argv=None, save_main_session=True):
                     | f"ReadFileContentSideInput {label}" >> beam.ParDo(ReadFileContentFn(project=project_ing, bucket_name=bucket_name))
                     | f"ProcessFile {label}" >> beam.ParDo(ProcessFileFn(table_schema=table_schema))
                     | f"ApplyTransformationRules {label}" >> ApplyTransformConformRules(transformation_rules=transformation_rules, entity_name=entity_name)
+                    # | f"PrintElement{label}" >> beam.ParDo(PrintJson())
             )
 
             write_date = (
@@ -107,22 +110,19 @@ def run(argv=None, save_main_session=True):
                                         create_disposition=BigQueryDisposition.CREATE_NEVER)
             )
 
-            archive_files = (
-                    file_list
-                    | f"MoveFilesToArchive {label}" >> beam.ParDo(MoveFilesToArchiveFn(
-                                        project=project_ing,
-                                        bucket_name=bucket_name,
-                                        archive_bucket_name=archive_bucket_name,
-                                        archive_folder=archive_folder),
-                                        data=beam.pvalue.AsList(data))
-            )
-
-
+            # archive_files = (
+            #         file_list
+            #         | f"MoveFilesToArchive {label}" >> beam.ParDo(MoveFilesToArchiveFn(
+            #                             project=project_ing,
+            #                             bucket_name=bucket_name,
+            #                             archive_bucket_name=archive_bucket_name,
+            #                             archive_folder=archive_folder),
+            #                             data=beam.pvalue.AsList(data))
+            # )
 
 class PrintJson(beam.DoFn):
     def process(self, element):
         logging.info("Result:{}".format(element))
-
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)

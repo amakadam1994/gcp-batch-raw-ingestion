@@ -1,3 +1,5 @@
+gcp-batch-raw-ingestion
+
 Packages required:
 
 python -m  pip install apache-beam[gcp]==2.46.0 
@@ -37,3 +39,9 @@ Keys in this config file are equal to label.upper() from gcs_to_bq_config.json
 
 Execute code in gcloud shell:
 gcloud dataflow jobs run mysql_to_gcs --gcs-location gs://bronze-poc-group/gcp-batch-raw-ingestion/dataflow/templates/mysql_to_gcs --region us-central1 --num-workers 2 --staging-location gs://bronze-poc-group/gcp-batch-raw-ingestion/dataflow/temp/ --additional-experiments use_portable_job_submission
+
+
+
+Run dataproc job
+# gs://bronze-poc-group/gcp-batch-raw-ingestion/dataproc/gcs_bq_dataproc.py
+# gs://bronze-poc-group/gcp-batch-raw-ingestion/dataproc/jars/spark-3.1-bigquery-0.31.1.jar
