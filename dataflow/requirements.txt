@@ -1,6 +1,6 @@
 apache-beam[gcp]==2.46.0
 google-cloud-storage==2.8.0
-pymongo==3.9.0
+pymongo==4.4.0
 pymongo[srv]
 pandas==1.5.3
 setuptools~=67.7.2
