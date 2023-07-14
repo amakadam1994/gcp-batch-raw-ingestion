@@ -1,6 +1,6 @@
 pipeline {
 
-agent { label 'gcp' }
+agent any
 
 environment {
 
